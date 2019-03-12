@@ -7,8 +7,13 @@
 #include <ctime>
 #include <cstdlib>
 #include "fb/fbjni/fbjni.h"
+using namespace std;
+#include <string>       // std::string
+#include <iostream>     // std::cout
+#include <sstream>      // std::stringstream
 
 pthread_t pthread_self(void);
+static std::stringstream ss("ss");
 
 #ifdef __cplusplus
 extern "C" {
@@ -418,6 +423,15 @@ JNI_METHOD_DECL(void, dumpAllocationDataInLog)
         }
     }
 }
+    
+JNI_METHOD_DECL(void, dumpForSigQuit)
+(JNIEnv *env, jobject jref) {
+    LOGI("start dumpForSigQuit");
+    //std::stringstream ss;
+    newArtThreadListDumpForSigQuit(localThreadList, ss, true);
+    LOGI("start dumpForSigQuit %s", ss.str().data());
+}
+    
 ///////////////////////////end dalivk//////////////////////////////
 
 bool saveARTAllocationData(SaveAllocationData saveData) {
