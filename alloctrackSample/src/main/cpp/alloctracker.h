@@ -139,6 +139,11 @@ static void newArtRecordAllocation22(Class *type, size_t byte_count) {
         }
     }
 }
+     
+static void (*oldArtThreadListDumpForSigQuit)(void *_this, std::ostream& os, bool dump_native_stack);
+static void newArtThreadListDumpForSigQuit(void *_this, std::ostream& os, bool dump_native_stack) {
+    oldArtThreadListDumpForSigQuit(_this, os, dump_native_stack);
+}     
 
 // the allocation tracker methods in Dalvik
 static void (*dvmEnableAllocTracker)() = NULL;

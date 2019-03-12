@@ -12,6 +12,8 @@ public class AllocTracker {
 
     public native void dumpAllocationDataInLog();
 
+    public native void dumpForSigQuit();
+    
     public native void startAllocationTracker();
 
     public native void stopAllocationTracker();
