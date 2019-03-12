@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        tracker.dumpAllocationDataInLog();
+                        tracker.dumpForSigQuit();
                     }
                 }).start();
             }
