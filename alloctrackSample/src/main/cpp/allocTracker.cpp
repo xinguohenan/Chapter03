@@ -67,6 +67,10 @@ void hookFunc() {
         LOGE("libart.so open fail");
         return;
     }
+    
+    void *dumpForSigQuit = ndk_dlsym(handle,
+                                     "_ZN3art10ThreadList21DumpUnattachedThreadsERNSt3__113basic_ostreamIcNS1_11char_traitsIcEEEEb");
+    
     void *hookRecordAllocation26 = ndk_dlsym(handle,
                                              "_ZN3art2gc20AllocRecordObjectMap16RecordAllocationEPNS_6ThreadEPNS_6ObjPtrINS_6mirror6ObjectEEEj");
 
@@ -79,6 +83,11 @@ void hookFunc() {
     void *hookRecordAllocation22 = ndk_dlsym(handle,
                                              "_ZN3art3Dbg16RecordAllocationEPNS_6mirror5ClassEj");
 
+    if (dumpForSigQuit != nullptr) {
+        MSHookFunction(dumpForSigQuit, (void *) &newArtThreadListDumpForSigQuit,
+                       (void **) &oldArtThreadListDumpForSigQuit);
+    }
+    
     //此处说明一下26和24版本需要使用 hookzz 的原因。
     //hookzz 框架有个优势是可以获取方法进入时候的寄存器内容，而很多时候我们要根据r0来获取 this
     if (hookRecordAllocation26 != nullptr) {
