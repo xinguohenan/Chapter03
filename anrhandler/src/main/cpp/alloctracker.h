@@ -33,7 +33,7 @@ typedef unsigned char u1;
 
 
 #define JNI_METHOD_DECL(ret_type, method_name) \
-     extern "C" JNIEXPORT ret_type JNICALL Java_##com_dodola_alloctrack##_##AllocTracker##_##method_name
+     extern "C" JNIEXPORT ret_type JNICALL Java_##com_xishui_anrhandler##_##ANRMonitor##_##method_name
 
 #ifdef __cplusplus
 extern "C" {
@@ -96,6 +96,8 @@ static bool (*artVmSetCheckJniEnabled)(bool) = NULL;
 static bool (*artAllocMapClear)(void *) = NULL;
 static int artAPILevel = 0;
 
+static void *localThreadList = nullptr;
+
 // dump alloc log in art
 static void (*artDbgDumpRecentAllocations)() = NULL;
 static const char *storeDataDirectory;
@@ -138,6 +140,15 @@ static void newArtRecordAllocation22(Class *type, size_t byte_count) {
             oldArtRecordAllocation22(type, byte_count);
         }
     }
+}
+
+static void (*oldArtThreadInit)(void *_this, void* threadList, void *javaVM, void *jniEnvExt);
+static void newArtThreadInit(void *_this, void* threadList, void *javaVM, void *jniEnvExt) {
+    if (localThreadList == nullptr) {
+        localThreadList = threadList;
+    }
+
+    oldArtThreadInit(_this, threadList, javaVM, jniEnvExt);
 }
      
 static void (*oldArtThreadListDumpForSigQuit)(void *_this, std::ostream& os, bool dump_native_stack);
