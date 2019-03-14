@@ -1,2 +1,2 @@
-include ':alloctrackSample', ':anrhandler'
+include ':alloctrackSample', ':anrhandler', ':anrhandlersample'
 include ':DumpPrinter'
