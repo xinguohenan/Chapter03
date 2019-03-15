@@ -10,7 +10,7 @@ public class ANRMonitor {
 
     public native String dumpForSigQuit();
     public native void setUpANRHandler();
-
+    public native void testCrash();
     static {
         System.loadLibrary("anrhandler");
     }
